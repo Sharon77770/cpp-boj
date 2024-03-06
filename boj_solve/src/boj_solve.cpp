@@ -1,146 +1,66 @@
-#include <iostream>
-#include <vector>
-#include <climits>
-#include <algorithm>
-#include <queue>
-#include <cstring>
-#include <map>
+#include <bits/stdc++.h>
 
+#define FASTIO ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0)
 #define endl "\n"
 
 using namespace std;
 
 using lld = long long int;
 
-int dp[2001], dp2[2001];
+map<string, string> dp;
 
-class Func {
-public:
-	bool operator() (int& a, int& b) { return dp[a] > dp[b]; }
-};
-
-class Func2 {
-public:
-	bool operator() (int& a, int& b) { return dp2[a] > dp2[b]; }
-};
-
-void dijk(vector<vector<int>>& graph, int st) {
-	priority_queue<int, vector<int>, Func> pq;
-	memset(dp, -1, sizeof(dp));
-
-	dp[st] = 0;
-	pq.push(st);
-
-	while(!pq.empty()) {
-		int cur = pq.top();
-		pq.pop();
-
-		for(int nxt = 0; nxt < graph.size(); ++nxt) {
-			if(graph[cur][nxt] == 0) continue;
-
-			if(dp[nxt] == -1) {
-				dp[nxt] = dp[cur] + graph[cur][nxt];
-				pq.push(nxt);
-			}
-			else if(dp[nxt] > dp[cur] + graph[cur][nxt]){
-				dp[nxt] = dp[cur] + graph[cur][nxt];
-				pq.push(nxt);
-			}
-		}
-	}
+string getParent(map<string, string>& parent, string cur) {
+	if(cur == parent[cur] || parent[cur] == "") return cur;
+	if(dp[cur] != "") return dp[cur] = getParent(parent, dp[cur]);
+	return dp[cur] = getParent(parent, parent[cur]);
 }
 
-void dijk2(vector<vector<int>>& graph, int st) {
-	priority_queue<int, vector<int>, Func2> pq;
-	memset(dp2, -1, sizeof(dp2));
+int link_set(map<string, string>& parent, map<string, int>& childCnt, string a, string b) {
+	auto ap = getParent(parent, a), bp = getParent(parent, b);
 
-	dp2[st] = 0;
-	pq.push(st);
+	if(bp == ap) return childCnt[ap];
 
-	while(!pq.empty()) {
-		int cur = pq.top();
-		pq.pop();
-
-		for(int nxt = 0; nxt < graph.size(); ++nxt) {
-			if(graph[cur][nxt] == 0) continue;
-
-			if(dp2[nxt] == -1) {
-				dp2[nxt] = dp2[cur] + graph[cur][nxt];
-				pq.push(nxt);
-			}
-			else if(dp2[nxt] > dp2[cur] + graph[cur][nxt]){
-				dp2[nxt] = dp2[cur] + graph[cur][nxt];
-				pq.push(nxt);
-			}
-		}
+	if(a < b) {
+		parent[bp] = ap;
+		return childCnt[ap] += childCnt[bp];
+	}
+	else {
+		parent[ap] = bp;
+		return childCnt[bp] += childCnt[ap];
 	}
 }
 
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
+	FASTIO;
 
 	int T;
 
 	cin >> T;
 
 	while(T--) {
-		vector<vector<int>> graph;
-		vector<int> arr;
-		int N, M, T;
-		int S, G, H;
+		int F;
+		map<string, string> parent;
+		map<string, int> childCnt;
+		dp.clear();
 
-		cin >> N >> M >> T;
-		cin >> S >> G >> H;
+		cin >> F;
 
-		graph.resize(N + 1, vector<int>(N + 1));
-		arr.resize(T);
+		while(F--) {
+			string s1, s2;
 
-		while(M--) {
-			int a, b, c;
+			cin >> s1 >> s2;
 
-			cin >> a >> b >> c;
-
-			graph[a][b] = c;
-			graph[b][a] = c;
-		}
-
-		for(auto& i : arr)
-			cin >> i;
-
-		dijk2(graph, S);
-
-		int SG = dp2[G] + graph[G][H], SH = dp2[H] + graph[G][H];
-		map<int, bool> ans;
-
-		if(SG != -1) {
-			dijk(graph, H);
-
-			for(auto& e : arr) {
-				if(dp[e] != -1) {
-					if(SG + dp[e] == dp2[e])
-						ans[e] = true;
-				}
+			if(childCnt[s1] == 0){
+				childCnt[s1] = 1;
+				parent[s1] = s1;
 			}
-		}
-
-		if(SH != -1) {
-			dijk(graph, G);
-
-			for(auto& e : arr){
-				if(dp[e] != -1) {
-					if(SH + dp[e] == dp2[e])
-						ans[e] = true;
-				}
+			if(childCnt[s2] == 0) {
+				childCnt[s2] = 1;
+				parent[s2] = s2;
 			}
-		}
 
-		for(const auto& pib : ans) {
-			cout << pib.first << " ";
+			cout << link_set(parent, childCnt, s1, s2) << endl;
 		}
-
-		cout << endl;
 	}
 
 	return 0;
