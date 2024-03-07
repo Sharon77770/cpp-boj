@@ -4,64 +4,65 @@
 #define endl "\n"
 
 using namespace std;
+using idp = pair<int, double>;
+using ddp = pair<double, double>;
 
-using lld = long long int;
+vector<vector<idp>> edges;
+vector<ddp> volts;
+vector<bool> visi;
 
-map<string, string> dp;
+class Func {
+public:
+	bool operator() (idp& a, idp& b) { return a.second > b.second; }
+};
 
-string getParent(map<string, string>& parent, string cur) {
-	if(cur == parent[cur] || parent[cur] == "") return cur;
-	if(dp[cur] != "") return dp[cur] = getParent(parent, dp[cur]);
-	return dp[cur] = getParent(parent, parent[cur]);
-}
-
-int link_set(map<string, string>& parent, map<string, int>& childCnt, string a, string b) {
-	auto ap = getParent(parent, a), bp = getParent(parent, b);
-
-	if(bp == ap) return childCnt[ap];
-
-	if(a < b) {
-		parent[bp] = ap;
-		return childCnt[ap] += childCnt[bp];
-	}
-	else {
-		parent[ap] = bp;
-		return childCnt[bp] += childCnt[ap];
-	}
+inline double getDis(ddp& a, ddp& b) {
+	return sqrt(pow(a.first - b.first, 2) + pow(a.second - b.second, 2));
 }
 
 int main() {
 	FASTIO;
 
-	int T;
+	int N;
 
-	cin >> T;
+	cin >> N;
 
-	while(T--) {
-		int F;
-		map<string, string> parent;
-		map<string, int> childCnt;
-		dp.clear();
+	volts.resize(N);
+	visi.resize(N, false);
+	edges.resize(N);
 
-		cin >> F;
+	for(int i = 0; i < N; ++i) {
+		cin >> volts[i].first >> volts[i].second;
 
-		while(F--) {
-			string s1, s2;
-
-			cin >> s1 >> s2;
-
-			if(childCnt[s1] == 0){
-				childCnt[s1] = 1;
-				parent[s1] = s1;
-			}
-			if(childCnt[s2] == 0) {
-				childCnt[s2] = 1;
-				parent[s2] = s2;
-			}
-
-			cout << link_set(parent, childCnt, s1, s2) << endl;
+		for(int j = 0; j < i; ++j) {
+			edges[i].push_back({ j, getDis(volts[i], volts[j])});
+			edges[j].push_back({ i, getDis(volts[i], volts[j])});
 		}
 	}
+
+	double ans = 0;
+	priority_queue<idp, vector<idp>, Func> pq;
+	pq.push({0, 0});
+
+	for(int cnt = 0; cnt < N; ++cnt) {
+		auto [cur, len] = pq.top();
+		pq.pop();
+
+		if(visi[cur]) { cnt--; continue; }
+
+		visi[cur] = true;
+		ans += len;
+
+		for(auto& [n, l] : edges[cur]) {
+			if(visi[n]) continue;
+			pq.push({ n, l });
+		}
+	}
+
+	cout.precision(2);
+	cout << fixed;
+
+	cout << ans;
 
 	return 0;
 }
