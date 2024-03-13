@@ -18,8 +18,8 @@ using llp = pair<lld, lld>;
 int main() {
     FASTIO;
 
-    stack<int> st;
-    int N;
+    deque<int> st;
+    int N, n;
 
     cin >> N;
 
@@ -30,27 +30,41 @@ int main() {
 
     	switch (cmd) {
     	case 1:
-    		int n;
     		cin >> n;
-    		st.push(n);
+    		st.push_front(n);
     		break;
 
     	case 2:
-    		if (st.empty()) cout << -1 << endl;
-    		else { cout << st.top() << endl; st.pop(); }
+    		cin >> n;
+    		st.push_back(n);
     		break;
 
     	case 3:
-    		cout << st.size() << endl;
+    		if (st.empty()) cout << -1 << endl;
+    		else { cout << st.front() << endl; st.pop_front(); }
     		break;
 
     	case 4:
+    		if (st.empty()) cout << -1 << endl;
+    		else { cout << st.back() << endl; st.pop_back(); }
+    		break;
+
+    	case 5:
+    		cout << st.size() << endl;
+    		break;
+
+    	case 6:
     		cout << (int)st.empty() << endl;
+    		break;
+
+    	case 7:
+    		if (st.empty()) cout << -1 << endl;
+    		else cout << st.front() << endl;
     		break;
 
     	default:
     		if (st.empty()) cout << -1 << endl;
-    		else cout << st.top() << endl;
+    		else cout << st.back() << endl;
     		break;
     	}
     }
