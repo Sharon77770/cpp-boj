@@ -1,17 +1,18 @@
 {
     "configurations": [
+
         {
-            "name": "C/C++: g++.exe 활성 파일 빌드 및 디버그",
+            "name": "(gdb) 시작",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "program": "${workspaceFolder}/boj_solve",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "C:/Program Files/mingw64/bin",
+            "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\Program Files\\mingw64\\bin\\gdb.exe",
+            "miDebuggerPath": "/usr/bin/gdb",
             "setupCommands": [
                 {
                     "description": "gdb에 자동 서식 지정 사용",
@@ -23,8 +24,7 @@
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
-            ],
-            "preLaunchTask": "C/C++: g++.exe 활성 파일 빌드"
+            ]
         }
     ],
     "version": "2.0.0"

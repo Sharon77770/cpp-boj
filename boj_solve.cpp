@@ -13,10 +13,14 @@ using iilt = tuple<int, int, lld>;
 using lllt = tuple<lld, lld, lld>;
 using llp = pair<lld, lld>;
 
+//9083
+
 int main() {
     FASTIO;
 
-	cout << "AAA";
+    string c;
+    cin >> c;
+    cout << c << endl;
 
     return 0;
 }
