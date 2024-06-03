@@ -18,6 +18,7 @@ using llp = pair<lld, lld>;
 int main() {
     FASTIO;
 
+    int N;
     string c;
     cin >> c;
     cout << c << endl;
