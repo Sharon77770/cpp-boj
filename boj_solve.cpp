@@ -18,7 +18,7 @@ using llp = pair<lld, lld>;
 int main() {
     FASTIO;
 
-    int B;
+    int A;
     string c;
     cin >> c;
     cout << c << endl;
