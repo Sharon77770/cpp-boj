@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-
+#include <vector>
 #define endl "\n"
 
 #define FASTIO std::ios_base::sync_with_stdio(false);std::cin.tie(0);std::cout.tie(0)
