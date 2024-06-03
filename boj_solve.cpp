@@ -19,6 +19,7 @@ int main() {
     FASTIO;
 
     int K;
+    int A;
     string c;
     cin >> c;
     cout << c << endl;
