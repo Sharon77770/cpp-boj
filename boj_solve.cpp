@@ -21,6 +21,7 @@ int main() {
     int K;
     int A;
     string c;
+    string texa;
     cin >> c;
     cout << c << endl;
 
