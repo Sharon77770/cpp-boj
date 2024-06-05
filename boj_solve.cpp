@@ -20,6 +20,7 @@ int main() {
 
     int K;
     int A;
+    string tex;
     string c;
     cin >> c;
     cout << c << endl;
